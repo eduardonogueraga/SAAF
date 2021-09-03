@@ -32,13 +32,13 @@
 #include "SQL.h"
 
 //VERSION (VE -> Version Estable VD -> Version Desarrollo)
-const char* version[] = {"FRESH VE20R0", "02/09/21"};
+const char* version[] = {"FRESH VD20R0", "02/09/21"};
 
 //VARIABLES GLOBALES
 ConfigSystem configSystem;
 EE_DatosSalto eeDatosSalto;
 
-byte MODO_DEFAULT = 1;  //@develop
+byte MODO_DEFAULT = 0;  //@develop
 byte INTENTOS_REACTIVACION = 0;
 
 //SENSORES

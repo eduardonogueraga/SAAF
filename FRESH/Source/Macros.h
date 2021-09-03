@@ -20,37 +20,37 @@
 #define TIEMPO_BOCINA_REACTIVACION_TEST 0.0666
 
 //TECLADO
-#define ROW_1 36
-#define ROW_2 34
-#define ROW_3 32
-#define ROW_4 30
-#define COL_1 38
-#define COL_2 40
-#define COL_3 42
+#define ROW_1 25
+#define ROW_2 24
+#define ROW_3 23
+#define ROW_4 22
+#define COL_1 26
+#define COL_2 27
+#define COL_3 28
 
 //PANTALLA
-#define CODEC_LCD 0x3F //  0x3F 0x27
+#define CODEC_LCD 0x27 //  0x3F 0x27
 
 //SENSORES
-#define PIR_SENSOR_1 43
-#define PIR_SENSOR_2 45
-#define PIR_SENSOR_3 47
+#define PIR_SENSOR_1 34
+#define PIR_SENSOR_2 35
+#define PIR_SENSOR_3 36
 //#define PIR_SENSOR_4 49
-#define MG_SENSOR 48
+#define MG_SENSOR 33
 
 //BOCINA
-#define BOCINA_PIN 23
+#define BOCINA_PIN 32
 
 //WATCHDOG
-#define WATCHDOG 22 // @develop ('Pines adaptados')
+#define WATCHDOG 5 // @develop ('Pines adaptados')
 
 //SLEEPMODE
-#define GSM_PIN 28
-#define BT_PIN 12
+#define GSM_PIN 39
+#define BT_PIN 38
 
 //COMUNICACIONES
-#define GSM_TX 8
-#define GSM_RX 9
+#define GSM_TX 49
+#define GSM_RX 48
 #define BT_TX 10
 #define BT_RX 11
 
@@ -58,10 +58,10 @@
 #define REGISTRO_SS_PIN 53
 
 //RESET
-#define RESETEAR 46
+#define RESETEAR 40
 
 //LED PUERTA
-#define LED_COCHERA 44
+#define LED_COCHERA 29
 
 //BATERIA E INTERRUPCIONES
 #define SENSOR_BATERIA_RESPALDO 2 //Monitoriza el flujo de tension en el booster

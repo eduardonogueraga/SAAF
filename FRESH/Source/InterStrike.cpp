@@ -117,7 +117,7 @@
 		}
 
 		if(millis()>tiempoMargen){
-			if (sensor == LOW) { // @develop("Cambiado a LOW para evitar saltos en sensor MG")
+			if (sensor == HIGH) { // @develop("Defecto = LOW")
 				ping:
 				gotoPing=0;
 				if(configSystem.SENSORES_HABLITADOS[this->numero]){

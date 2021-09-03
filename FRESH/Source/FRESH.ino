@@ -1,6 +1,6 @@
 /**
  * SISTEMA DE ALARMA DE LA ALBERQUILLA (FRESH)
- * Version: VE20R0
+ * Version: Develop
  * Leyenda: @develop
  *
  * POR HACER: 	F() -20 bytes por string,
@@ -32,8 +32,6 @@ void setup()
 	Serial.begin(9600);
 	bluetooh.begin(38400);
 	Serial.println(version[0]);
-	pantalla.lcdLoadView(&pantalla, &Pantalla::lcdInicio);
-	delay(2000);
 
 	EEPROM_RestoreData(EE_CONFIG_STRUCT, configSystem);
 
@@ -41,6 +39,9 @@ void setup()
 	mensaje.inicioSIM800(SIM800L);
 	registro.iniciar();
 	fecha.iniciarRTC();
+
+	pantalla.lcdLoadView(&pantalla, &Pantalla::lcdInicio);
+	delay(2000);
 
 	pinMode(PIR_SENSOR_1, INPUT_PULLUP);
     pinMode(PIR_SENSOR_2, INPUT_PULLUP);
@@ -58,13 +59,39 @@ void setup()
     digitalWrite(LED_COCHERA, LOW);
 
     pinMode(SENSOR_BATERIA_RESPALDO, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(FALLO_BATERIA_PRINCIPAL), interrupcionFalloAlimentacion, FALLING);
+   //attachInterrupt(digitalPinToInterrupt(FALLO_BATERIA_PRINCIPAL), interrupcionFalloAlimentacion, FALLING); //@develop
 
 	EstadoInicio();
 	cargarEstadoPrevio();
 	checkearAlertasDetenidas();
 	chekearInterrupciones();
 
+	Serial.println("Modo Sensible: " + (String)configSystem.MODO_SENSIBLE);
+	Serial.println("Tarjeta SD: " + (String)configSystem.MODULO_SD);
+	Serial.println("RTC: " + (String)configSystem.MODULO_RTC);
+	Serial.println("SMS HISTORICO: " + (String)configSystem.SMS_HISTORICO);
+	Serial.println("FECHA SMS HIST: " + (String)configSystem.FECHA_SMS_HITORICO);
+	Serial.println("SENSORES: " );
+
+	for (byte var = 0; var < 4; ++var) {
+		Serial.print(configSystem.SENSORES_HABLITADOS[var]);
+	}
+
+	Serial.println("CTRL INTER: " );
+	Serial.println(EEPROM.read(EE_ERROR_INTERRUPCION));
+	Serial.println("CTRL INTER SMS");
+	Serial.println(EEPROM.read(EE_MENSAJE_EMERGENCIA));
+	Serial.println("INTER HISTORICO");
+	Serial.println(EEPROM.read(EE_INTERRUPCIONES_HISTORICO));
+	Serial.println("GUARD: " + (String)EEPROM.read(EE_ESTADO_GUARDIA));
+	Serial.println("ALERT: " + (String)EEPROM.read(EE_ESTADO_ALERTA));
+	Serial.println("DATOS: " );
+	for (byte var = 0; var < 4; ++var) {
+		Serial.print(eeDatosSalto.DATOS_SENSOR[var]);
+	}
+
+
+	//EEPROM.update(EE_ERROR_INTERRUPCION, 0);
 }
 
 void loop()
