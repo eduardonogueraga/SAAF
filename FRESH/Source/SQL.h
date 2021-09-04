@@ -18,8 +18,10 @@ void insertQuery(void (*otherFunction)(String*)) {
 }
 
 void insertQuery(void (*otherFunction)(String*, String, String), String param1, String param2) {
-	(*otherFunction)(&registro.getInsertSql(), param1, param2);
-	registro.registrarEventoSQL();
+	if(MODO_DEFAULT){
+		(*otherFunction)(&registro.getInsertSql(), param1, param2);
+		registro.registrarEventoSQL();
+	}
 }
 
 void sqlInicioAlarma(String *p){
