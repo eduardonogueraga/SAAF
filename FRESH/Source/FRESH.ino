@@ -32,8 +32,6 @@ void setup()
 	Serial.begin(9600);
 	bluetooh.begin(38400);
 	Serial.println(version[0]);
-	pantalla.lcdLoadView(&pantalla, &Pantalla::lcdInicio);
-	delay(2000);
 
 	EEPROM_RestoreData(EE_CONFIG_STRUCT, configSystem);
 
@@ -41,6 +39,9 @@ void setup()
 	mensaje.inicioSIM800(SIM800L);
 	registro.iniciar();
 	fecha.iniciarRTC();
+
+	pantalla.lcdLoadView(&pantalla, &Pantalla::lcdInicio);
+	delay(2000);
 
 	pinMode(PIR_SENSOR_1, INPUT_PULLUP);
     pinMode(PIR_SENSOR_2, INPUT_PULLUP);
