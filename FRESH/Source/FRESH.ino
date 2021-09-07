@@ -33,6 +33,11 @@ void setup()
 	bluetooh.begin(38400);
 	Serial.println(version[0]);
 
+	Serial.print("Memoria RAM utilizada: ");
+	Serial.print(8192-freeRam());
+	Serial.print(" bytes");
+	Serial.println(" ");
+
 	EEPROM_RestoreData(EE_CONFIG_STRUCT, configSystem);
 
 	pantalla.iniciar();
