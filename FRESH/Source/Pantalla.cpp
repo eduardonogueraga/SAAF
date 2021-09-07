@@ -59,6 +59,13 @@ void Pantalla::lcdInicio(){
 	lcd.print(version[0]);
 }
 
+void Pantalla::lcdError(){
+	lcd.setCursor(0,0);
+	lcd.print(F("  SYSTM ERROR!  "));
+	lcd.setCursor(0,1);
+	lcd.print(this->errorTexto);
+}
+
 void Pantalla::lcdFalloBateria()
 {
 	lcd.setCursor(0,0);
@@ -427,4 +434,9 @@ void Pantalla::lcdGuardia(){
 		lcd.print(F(" ERROR ACTIVE EL"));
 		lcd.setCursor(0,1);
 		lcd.print(F("BLUETOOH PRIMERO"));
+	}
+
+
+	String& Pantalla::getErrorTexto() {
+		return errorTexto;
 	}
