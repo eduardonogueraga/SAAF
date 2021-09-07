@@ -373,14 +373,14 @@ static byte tiempoFracccion;
 
 	void checkearBateriaDeEmergencia(){
 
+		alertsInfoLcd[INFO_FALLO_BATERIA] = !digitalRead(SENSOR_BATERIA_RESPALDO);
+
 		if(digitalRead(SENSOR_BATERIA_RESPALDO) != sensorBateriaAnterior){
 
 			if(digitalRead(SENSOR_BATERIA_RESPALDO) == HIGH){
 				insertQuery(&sqlBateriaEmergenciaActivada);
-				alertsInfoLcd[INFO_FALLO_BATERIA] = 0;
 			} else{
 				insertQuery(&sqlBateriaEmergenciaDesactivada);
-				alertsInfoLcd[INFO_FALLO_BATERIA] = 1;
 			}
 		}
 
@@ -560,7 +560,7 @@ static byte tiempoFracccion;
 	}
 
 	void checkearSensorPuertaCochera(){
-		alertsInfoLcd[INFO_SENSOR_PUERTA_OFF] = !sensorHabilitado[0];
+		alertsInfoLcd[INFO_SENSOR_PUERTA_OFF] = !configSystem.SENSORES_HABLITADOS[0];
 	}
 
 	void avisoLedPuertaCochera(){
