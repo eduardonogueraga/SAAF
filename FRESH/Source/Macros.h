@@ -283,7 +283,7 @@ template <class T> int EEPROM_SaveData(int ee, const T& value)
     const uint8_t* p = (const uint8_t*)(const void*)&value;
     unsigned int i;
     for (i = 0; i < sizeof(value); i++)
-          EEPROM.write(ee++, *p++);
+          EEPROM.update(ee++, *p++);
     return i;
 }
 
