@@ -22,6 +22,7 @@ public:
 	Bocina();
 	void sonarBocina(unsigned short bocinaIntervalo = 5000);
 	void stopBocina();
+	void bocinaAlert();
 };
 
 #endif /* PROYECTO_BOCINA_H_ */

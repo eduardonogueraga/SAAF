@@ -43,9 +43,9 @@ void setup()
 	pantalla.lcdLoadView(&pantalla, &Pantalla::lcdInicio);
 	delay(2000);
 
-	pinMode(PIR_SENSOR_1, INPUT_PULLUP);
-    pinMode(PIR_SENSOR_2, INPUT_PULLUP);
-    pinMode(PIR_SENSOR_3, INPUT_PULLUP);
+	pinMode(PIR_SENSOR_1, INPUT);
+    pinMode(PIR_SENSOR_2, INPUT);
+    pinMode(PIR_SENSOR_3, INPUT);
     pinMode(MG_SENSOR, INPUT_PULLUP);
 
 	pinMode(GSM_PIN, OUTPUT);

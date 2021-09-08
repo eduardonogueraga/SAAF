@@ -34,5 +34,10 @@ void Bocina::stopBocina(){
 	digitalWrite(BOCINA_PIN,LOW);
 }
 
+void Bocina::bocinaAlert(){
+	digitalWrite(BOCINA_PIN, HIGH);
+	delay(1000);
+	digitalWrite(BOCINA_PIN,LOW);
+}
 
 

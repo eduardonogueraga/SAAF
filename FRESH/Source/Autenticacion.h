@@ -14,6 +14,7 @@
 #include "Env.h"
 
 extern unsigned long lcd_clave_tiempo;
+extern unsigned long lcd_info_tiempo;
 extern char key;
 
 class Autenticacion {

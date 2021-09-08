@@ -41,6 +41,8 @@ void Autenticacion::construirEntrada(char key){
 		//chekear que esta en estado clave
 		this->entradaTeclado = this->entradaTeclado + key;
 		Serial.println("(Entrada:" + this->entradaTeclado + ") ");
+	}else {
+		lcd_info_tiempo = millis(); //Skipea los alerts
 	}
 
 }

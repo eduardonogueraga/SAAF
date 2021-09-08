@@ -30,7 +30,8 @@ extern ConfigSystem configSystem;
 
 
 class Pantalla {
-
+private:
+	String errorTexto;
 public:
 	Pantalla();
 	void lcdLoadView(Pantalla *obj,void (Pantalla::*otherFunction)());
@@ -38,6 +39,7 @@ public:
 	void iniciar();
 	void limpiarPantalla();
 	void lcdInicio();
+	void lcdError();
 	void lcdFalloBateria();
 	void lcdSensorPuertaDesconectado();
 	void lcdAvisoResetAuto();
@@ -71,6 +73,7 @@ public:
 	void menuInfoBluetoohAviso();
 	void menuCheck();
 	void errorEmergencia();
+	String& getErrorTexto();
 };
 
 #endif /* SOURCE_PANTALLA_H_ */

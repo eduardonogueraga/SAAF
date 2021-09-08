@@ -32,7 +32,7 @@
 #include "SQL.h"
 
 //VERSION (VE -> Version Estable VD -> Version Desarrollo)
-const char* version[] = {"FRESH VE20R0", "02/09/21"};
+const char* version[] = {"FRESH VE20R0", "08/09/21"};
 
 //VARIABLES GLOBALES
 ConfigSystem configSystem;
@@ -181,6 +181,13 @@ static byte tiempoFracccion;
 	 }
 
 	 return mostrarLcdAlerts();
+ }
+
+ void pantallaDeErrorInicial(String mensaje){
+		String *errLcd = &pantalla.getErrorTexto();
+		*errLcd = mensaje;
+		pantalla.lcdLoadView(&pantalla, &Pantalla::lcdError);
+		delay(2000);
  }
 
 	void setMargenTiempo(unsigned long &tiempoMargen, const unsigned long tiempo, float porcentaje = 1.0F){
@@ -373,14 +380,14 @@ static byte tiempoFracccion;
 
 	void checkearBateriaDeEmergencia(){
 
+		alertsInfoLcd[INFO_FALLO_BATERIA] = !digitalRead(SENSOR_BATERIA_RESPALDO);
+
 		if(digitalRead(SENSOR_BATERIA_RESPALDO) != sensorBateriaAnterior){
 
 			if(digitalRead(SENSOR_BATERIA_RESPALDO) == HIGH){
 				insertQuery(&sqlBateriaEmergenciaActivada);
-				alertsInfoLcd[INFO_FALLO_BATERIA] = 0;
 			} else{
 				insertQuery(&sqlBateriaEmergenciaDesactivada);
-				alertsInfoLcd[INFO_FALLO_BATERIA] = 1;
 			}
 		}
 
@@ -560,7 +567,7 @@ static byte tiempoFracccion;
 	}
 
 	void checkearSensorPuertaCochera(){
-		alertsInfoLcd[INFO_SENSOR_PUERTA_OFF] = !sensorHabilitado[0];
+		alertsInfoLcd[INFO_SENSOR_PUERTA_OFF] = !configSystem.SENSORES_HABLITADOS[0];
 	}
 
 	void avisoLedPuertaCochera(){
