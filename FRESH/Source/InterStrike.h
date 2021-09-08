@@ -10,9 +10,12 @@
 #include "Arduino.h"
 #include "Datos.h"
 #include "Macros.h"
+#include "Bocina.h"
 
 extern unsigned long tiempoMargen;
 extern ConfigSystem configSystem;
+extern Bocina bocina;
+extern byte MODO_DEFAULT;
 
 class InterStrike {
 

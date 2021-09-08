@@ -69,6 +69,9 @@
 					insertQuery(&sqlSensorEstandar, ("PIR"+(String)(this->numero)), "ONLINE");
 					insertQuery(&sqlSalto);
 
+					if(!MODO_DEFAULT)
+					bocina.bocinaAlert();
+
 				} else {
 					Serial.print("\nSensor ");
 					Serial.print(this->numero);
