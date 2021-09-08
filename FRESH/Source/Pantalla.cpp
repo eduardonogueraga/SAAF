@@ -61,9 +61,9 @@ void Pantalla::lcdInicio(){
 
 void Pantalla::lcdError(){
 	lcd.setCursor(0,0);
-	lcd.print(F("  SYSTM ERROR!  "));
+	lcd.print(this->errorTexto.substring(0,16));
 	lcd.setCursor(0,1);
-	lcd.print(this->errorTexto);
+	lcd.print(this->errorTexto.substring(16,32));
 }
 
 void Pantalla::lcdFalloBateria()

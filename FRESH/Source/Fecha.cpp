@@ -17,6 +17,8 @@ void Fecha::iniciarRTC(){
 
 	 if (! rtc.begin()) {
 		 Serial.println("Modulo RTC no encontrado !");
+
+		 pantallaDeErrorInicial(F("  SYSTM ERROR!  ERR INICIAR  RTC"));
 		 }
 		 //rtc.adjust(DateTime(__DATE__, __TIME__));  //Establecer tiempo
 }

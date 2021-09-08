@@ -183,6 +183,13 @@ static byte tiempoFracccion;
 	 return mostrarLcdAlerts();
  }
 
+ void pantallaDeErrorInicial(String mensaje){
+		String *errLcd = &pantalla.getErrorTexto();
+		*errLcd = mensaje;
+		pantalla.lcdLoadView(&pantalla, &Pantalla::lcdError);
+		delay(2000);
+ }
+
 	void setMargenTiempo(unsigned long &tiempoMargen, const unsigned long tiempo, float porcentaje = 1.0F){
 
 		if(MODO_DEFAULT == 1){

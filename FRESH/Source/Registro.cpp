@@ -16,8 +16,12 @@ void Registro::iniciar(){
 	if(!configSystem.MODULO_SD)
 		return;
 
-	 if (!sd.begin(REGISTRO_SS_PIN, SPI_HALF_SPEED)) Serial.println(F("ERROR AL INICIAR SD"));
-	 //sd.initErrorHalt();
+	if (!sd.begin(REGISTRO_SS_PIN, SPI_HALF_SPEED)) {
+		Serial.println(F("ERROR AL INICIAR SD"));
+		//sd.initErrorHalt();
+
+		pantallaDeErrorInicial(F("  SYSTM ERROR!  ERROR INICIAR SD"));
+	}
 }
 
 

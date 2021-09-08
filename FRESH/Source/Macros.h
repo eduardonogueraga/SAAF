@@ -105,6 +105,7 @@ void sqlUpdateErrores(String *p);
 void sqlSensorPuertaDeshabilitado(String *p);
 void sqlIntentosRecuperados(String *p);
 
+void pantallaDeErrorInicial(String mensaje);
 //STRUCTS
 
 struct datos_saltos_t{
