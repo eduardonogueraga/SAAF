@@ -117,6 +117,7 @@ void procesosSistema(){
 	checkearBateriaDeEmergencia();
 	checkearSensorPuertaCochera();
 	avisoLedPuertaCochera();
+	resetearAlarma();
 }
 
 void procesosPrincipales()
@@ -146,7 +147,6 @@ void procesoAlarma(){
 		if(!isLcdInfo())
 		pantalla.lcdLoadView(&pantalla, &Pantalla::lcdReposo);
 
-		auth.comprobarEntrada();
 		if(auth.isPasswordCached()){
 			if (key != NO_KEY){
 				if(key == '*'){
@@ -155,10 +155,6 @@ void procesoAlarma(){
 
 				if(key == '2'){ //Tecla menu
 					procesoCentral = MENU;
-				}
-
-				if(key == '0'){
-					resetear();
 				}
 			}
 		}

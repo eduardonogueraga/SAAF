@@ -114,6 +114,7 @@ static byte tiempoFracccion;
  //FUNCIONES//
  void leerEntradaTeclado(){
 	 key = keypad.getKey();
+	 auth.comprobarEntrada();
  }
 
  byte mostrarLcdAlerts(){
@@ -205,9 +206,6 @@ static byte tiempoFracccion;
 	}
 
 	void desactivarAlarma(){
-
-		auth.comprobarEntrada();
-
 		if(auth.isPasswordCached()){
 			if (key != NO_KEY){
 				if(key == '#'){
@@ -218,8 +216,6 @@ static byte tiempoFracccion;
 	}
 
 	void desactivarEstadoDeError(){
-		auth.comprobarEntrada();
-
 		if(auth.isPasswordCached()){
 			if (key != NO_KEY){
 				if(key == '#'){
@@ -332,6 +328,17 @@ static byte tiempoFracccion;
 			}
 		}else {
 			alertsInfoLcd[INFO_RESET_AUTO] = 0;
+		}
+	}
+
+	void resetearAlarma(){
+		if(auth.isPasswordCached()){
+			if (key != NO_KEY){
+				if(key == '0'){
+					setEstadoReposo();
+					resetear();
+				}
+			}
 		}
 	}
 
