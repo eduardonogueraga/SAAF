@@ -27,11 +27,9 @@ void Mensajes::mensajeAlerta(Datos &datos){
 	this->asuntoMensaje = this->asuntoAlerta(datos);
 	this->cuerpoMensaje = datos.imprimeDatos();
 
-	if(zona != MG){
-		this->pieMensaje = "Intentos restantes: "+ (String)(3-INTENTOS_REACTIVACION);
-	}else{
-		this->pieMensaje = "La alarma no se reactivara con la puerta abierta";
-	}
+	this->pieMensaje = "Intentos restantes: "+ (String)(3-INTENTOS_REACTIVACION);
+	if(flagPuertaAbierta)
+		this->pieMensaje += "\nLa puerta esta abierta";
 
 	pieFechaBateria();
 	this->enviarSMS();
@@ -43,7 +41,7 @@ void Mensajes::mensajeAlerta(Datos &datos){
 void Mensajes::mensajeReactivacion(Datos &datos){
 
 	this->tipoMensaje = SMS_TIPO_INFO;
-	this->asuntoMensaje = "ALARMA REACTIVDA CON EXITO";
+	this->asuntoMensaje = "ALARMA REACTIVADA CON EXITO";
 	this->cuerpoMensaje = datos.imprimeDatos();
 	this->pieMensaje = "";
 
@@ -133,9 +131,9 @@ void Mensajes::procesarSMS(){
 	SIM800L.println("AT+CMGS=\"+34"+(String)telefonoPrincipal+"\"");
 	delay(200);
 
-	SIM800L.print(this->asuntoMensaje+"\n");
-	SIM800L.println(this->cuerpoMensaje);
-	SIM800L.println(this->pieMensaje);
+	Serial.print(this->asuntoMensaje+"\n");//@develop
+	Serial.println(this->cuerpoMensaje);//@develop
+	Serial.println(this->pieMensaje);//@develop
 
 	delay(200);
 	SIM800L.print((char)26);
@@ -170,9 +168,9 @@ String Mensajes::asuntoAlerta(Datos &datos){
 
 		if(mapSensor[i] == MAX_SALTO[i]) {
 			//Salto principal
-			asuntoMensaje = "AVISO ALARMA";
-			if(nombreZonas[i] == ("PUERTA")) {
-				asuntoMensaje += " PUERTA DE LA COCHERA ABIERTA";
+			asuntoMensaje = "AVISO ALARMA:";
+			if(nombreZonas[i] == ("PUERTA COCHERA")) {
+				asuntoMensaje += " PUERTA ABIERTA EN COCHERA";
 			}else {
 				asuntoMensaje += " MOVIMIENTO DETECTADO EN "+nombreZonas[i];
 			}

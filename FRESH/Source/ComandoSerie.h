@@ -25,6 +25,7 @@ extern InterStrike pir1, pir2, pir3, mg;
 extern Registro registro;
 extern Datos datosSensores;
 extern SoftwareSerial bluetooh;
+extern byte sensorHabilitado[];
 
 extern void interrupcionFalloAlimentacion();
 

@@ -32,7 +32,7 @@
 #include "SQL.h"
 
 //VERSION (VE -> Version Estable VD -> Version Desarrollo)
-const char* version[] = {"FRESH VD20R0", "02/09/21"};
+const char* version[] = {"FRESH VD20R1", "07/06/22"};
 
 //VARIABLES GLOBALES
 ConfigSystem configSystem;
@@ -67,7 +67,7 @@ Registro registro;
 Fecha fecha;
 
 InterStrike mg = InterStrike(0, 1, datosSensores);
-InterStrike pir1 = InterStrike(1, 3, datosSensores, 5000, 60000);
+InterStrike pir1 = InterStrike(1, 1, datosSensores, 5000, 60000);
 InterStrike pir2 = InterStrike(2, 2, datosSensores, 7000, 20000);
 InterStrike pir3 = InterStrike(3, 2, datosSensores, 5000, 21000);
 
@@ -110,6 +110,9 @@ static byte tiempoFracccion;
 
  //Control bateria
  bool sensorBateriaAnterior; //Compara el estado de la bateria
+
+ //FLAG PUERTA
+ byte flagPuertaAbierta = 0;
 
  //FUNCIONES//
  void leerEntradaTeclado(){
@@ -343,6 +346,8 @@ static byte tiempoFracccion;
 	}
 
 	void cargarEstadoPrevio(){
+		   flagPuertaAbierta = EEPROM.read(EE_FLAG_PUERTA_ABIERTA) == 1;
+
 		if (EEPROM.read(EE_ESTADO_GUARDIA) == 1 && EEPROM.read(EE_ERROR_INTERRUPCION) == 0) {
 			estadoAlarma = ESTADO_GUARDIA;
 			insertQuery(&sqlUpdateEntradaRestaurada);
