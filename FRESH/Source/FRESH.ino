@@ -193,16 +193,15 @@ void procesoAlarma(){
 
 		if(checkearMargenTiempo(tiempoMargen)){
 
-			if(zona != MG){
-				if(INTENTOS_REACTIVACION < 3){
+			if(INTENTOS_REACTIVACION < 3){
 
-					INTENTOS_REACTIVACION++;
-					if(configSystem.MODO_SENSIBLE){
-						setMargenTiempo(tiempoSensible,TIEMPO_MODO_SENSIBLE, TIEMPO_MODO_SENSIBLE_TEST);
-					}
-					setEstadoGuardiaReactivacion();
+				INTENTOS_REACTIVACION++;
+				if(configSystem.MODO_SENSIBLE){
+					setMargenTiempo(tiempoSensible,TIEMPO_MODO_SENSIBLE, TIEMPO_MODO_SENSIBLE_TEST);
 				}
+				setEstadoGuardiaReactivacion();
 			}
+
 		}
 
 		mg.compruebaPhantom(digitalRead(MG_SENSOR),datosSensoresPhantom);
@@ -247,6 +246,16 @@ void setEstadoGuardiaReactivacion()
 	setMargenTiempo(prorrogaGSM, TIEMPO_PRORROGA_GSM, TIEMPO_PRORROGA_GSM_TEST);
 	sleepModeGSM = GSM_TEMPORAL;
 
+
+	//Desabilitar puerta tras la reactivacion
+	if(configSystem.SENSORES_HABLITADOS[0] && zona == MG ){
+		flagPuertaAbierta = 1;
+		EEPROM.update(EE_FLAG_PUERTA_ABIERTA, 1);
+
+		sensorHabilitado[0] = 0;
+		arrCopy<byte>(sensorHabilitado, configSystem.SENSORES_HABLITADOS, 4);
+		EEPROM_SaveData(EE_CONFIG_STRUCT, configSystem);
+	}
 
 	mensaje.mensajeReactivacion(datosSensoresPhantom);
 	datosSensoresPhantom.borraDatos();
@@ -301,6 +310,15 @@ void setEstadoReposo()
 	desactivaciones ++;
 	EEPROM.update(EE_ESTADO_GUARDIA, 0);
 	EEPROM.update(EE_ESTADO_ALERTA, 0);
+
+	//Rehabilitar sensor puerta
+	if(flagPuertaAbierta){
+		sensorHabilitado[0] = 1;
+		arrCopy<byte>(sensorHabilitado, configSystem.SENSORES_HABLITADOS, 4);
+		EEPROM_SaveData(EE_CONFIG_STRUCT, configSystem);
+
+		EEPROM.update(EE_FLAG_PUERTA_ABIERTA, 0);
+	}
 
 	insertQuery(&sqlDesactivarAlarma);
 }

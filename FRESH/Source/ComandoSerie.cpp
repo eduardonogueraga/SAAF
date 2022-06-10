@@ -43,7 +43,7 @@ void ComandoSerie::comprobarComando() {
 	if (data.indexOf("set mode") >= 0) {
 
 		if(MODO_DEFAULT){
-			Serial.println("Alarma en modo de purebas");
+			Serial.println("Alarma en modo de pruebas");
 			MODO_DEFAULT = 0;
 		}else {
 			Serial.println("Alarma en modo default");
@@ -85,6 +85,20 @@ void ComandoSerie::comprobarComando() {
 	if (data.indexOf("mg") >= 0) {
 
 		mg.pingSensor();
+	}
+
+	if (data.indexOf("ch puerta") >= 0) {
+
+		sensorHabilitado[0] = !sensorHabilitado[0];
+		arrCopy<byte>(sensorHabilitado, configSystem.SENSORES_HABLITADOS, 4);
+		EEPROM_SaveData(EE_CONFIG_STRUCT, configSystem);
+
+		if(!sensorHabilitado[0]){
+			Serial.println("Sensor puerta deshabilitado" );
+
+		}else{
+			Serial.println("Sensor puerta habilitado" );
+		}
 	}
 
 	if (data.indexOf("mail") >= 0) {

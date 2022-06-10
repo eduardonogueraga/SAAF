@@ -25,6 +25,7 @@ extern byte mensajesEnviados;
 extern ConfigSystem configSystem;
 extern Fecha fecha;
 extern CODIGO_ERROR codigoError;
+extern byte flagPuertaAbierta;
 
 class Mensajes {
 
