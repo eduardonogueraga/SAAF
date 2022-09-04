@@ -59,6 +59,14 @@ void setup()
     pinMode(RESETEAR,OUTPUT);
     pinMode(WATCHDOG, OUTPUT);
 
+    pinMode(RELE_TENSION_LINEA, OUTPUT);
+    pinMode(RELE_AUXILIAR, OUTPUT);
+
+    digitalWrite(RELE_TENSION_LINEA,HIGH); //LOGICA INVERSA
+    digitalWrite(RELE_AUXILIAR,HIGH);	//LOGICA INVERSA
+
+	pinMode(RS_CTL, OUTPUT);
+	digitalWrite(RS_CTL,LOW);
 
     pinMode(LED_COCHERA, OUTPUT);
     digitalWrite(LED_COCHERA, LOW);
