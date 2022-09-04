@@ -32,7 +32,7 @@
 #include "SQL.h"
 
 //VERSION (VE -> Version Estable VD -> Version Desarrollo)
-const char* version[] = {"FRESH VE20R1", "07/06/22"};
+const char* version[] = {"FRESH VE20R2", "04/09/22"};
 
 //VARIABLES GLOBALES
 ConfigSystem configSystem;

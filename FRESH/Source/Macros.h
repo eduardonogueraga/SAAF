@@ -44,6 +44,13 @@
 //WATCHDOG
 #define WATCHDOG 22 // @develop ('Pines adaptados')
 
+//RS485
+#define RS_CTL 18
+
+//CONTROL RELES 12V
+#define RELE_TENSION_LINEA 3
+#define RELE_AUXILIAR 4
+
 //SLEEPMODE
 #define GSM_PIN 28
 #define BT_PIN 12
