@@ -32,7 +32,7 @@
 #include "SQL.h"
 
 //VERSION (VE -> Version Estable VD -> Version Desarrollo)
-const char* version[] = {"FRESH VD20R2", "04/09/22"};
+const char* version[] = {"FRESH VD20R3", "12/02/23"};
 
 //VARIABLES GLOBALES
 ConfigSystem configSystem;
@@ -80,6 +80,9 @@ const unsigned long TIEMPO_MODO_SENSIBLE = 3600000; // (*0.0166)  -> 60000*
 const unsigned long TIEMPO_BOCINA = 600000; // (*0.0333) -> 20000* //300000(*0.0666) ->20000
 const unsigned long TIEMPO_PRORROGA_GSM = 1200000; // (*0.05) -> 60000
 const unsigned short TIEMPO_CARGA_GSM = 10000;
+
+const unsigned long TIEMPO_PENALIZA_SMS = 54000000; // 15 Horas
+unsigned long ultima_verificacion_sms = 0;
 
 unsigned long tiempoMargen;
 
@@ -294,10 +297,25 @@ static byte tiempoFracccion;
 	}
 
 	void checkearSms(){
+		/*
 		if(!configSystem.MODULO_RTC){
 			return;
 		}
+		 */
 
+		// Obtener el tiempo actual en milisegundos
+		  unsigned long tiempo_actual = millis();
+
+
+	   if(tiempo_actual - ultima_verificacion_sms  >= TIEMPO_PENALIZA_SMS){
+			if(EEPROM.read(MENSAJES_ENVIADOS) != 0){
+
+				EEPROM.write(MENSAJES_ENVIADOS,0);
+				//insertQuery(&sqlIntentosRecuperados);
+				Serial.println(F("Intentos diarios recuperados"));
+			}
+	   }
+		/*
 		if(fecha.comprobarHora(0, 0)){
 			if(EEPROM.read(MENSAJES_ENVIADOS) != 0){
 				EEPROM.write(MENSAJES_ENVIADOS,0);
@@ -305,7 +323,7 @@ static byte tiempoFracccion;
 				Serial.println(F("Intentos diarios recuperados"));
 			}
 		}
-
+		*/
 	}
 
 	void resetear(){
