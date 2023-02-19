@@ -32,7 +32,7 @@
 #include "SQL.h"
 
 //VERSION (VE -> Version Estable VD -> Version Desarrollo)
-const char* version[] = {"FRESH VD20R3", "12/02/23"};
+const char* version[] = {"FRESH VD20R3", "19/02/23"};
 
 //VARIABLES GLOBALES
 ConfigSystem configSystem;
@@ -82,6 +82,8 @@ const unsigned long TIEMPO_PRORROGA_GSM = 1200000; // (*0.05) -> 60000
 const unsigned short TIEMPO_CARGA_GSM = 10000;
 
 const unsigned long TIEMPO_PENALIZA_SMS = 54000000; // 15 Horas
+const unsigned long TIEMPO_HASTA_RESET = 864000000; // 10 Dias
+
 unsigned long ultima_verificacion_sms = 0;
 
 unsigned long tiempoMargen;
@@ -307,6 +309,7 @@ static byte tiempoFracccion;
 		  unsigned long tiempo_actual = millis();
 
 
+
 	   if(tiempo_actual - ultima_verificacion_sms  >= TIEMPO_PENALIZA_SMS){
 			if(EEPROM.read(MENSAJES_ENVIADOS) != 0){
 
@@ -314,6 +317,8 @@ static byte tiempoFracccion;
 				//insertQuery(&sqlIntentosRecuperados);
 				Serial.println(F("Intentos diarios recuperados"));
 			}
+
+			ultima_verificacion_sms = tiempo_actual;
 	   }
 		/*
 		if(fecha.comprobarHora(0, 0)){
@@ -335,6 +340,19 @@ static byte tiempoFracccion;
 
 	void resetAutomatico(){
 
+		 if(millis() >= (TIEMPO_HASTA_RESET - 43200000UL)){ //Menos 12 horas antes
+			 alertsInfoLcd[INFO_RESET_AUTO] = 1;
+
+			 if(millis() >= TIEMPO_HASTA_RESET){
+				 Serial.println(F("\nReset programado"));
+						 resetear();
+			 }
+
+		 }else {
+			 alertsInfoLcd[INFO_RESET_AUTO] = 0;
+		 }
+
+		/*
 		if(!configSystem.MODULO_RTC){
 			return;
 		}
@@ -350,6 +368,7 @@ static byte tiempoFracccion;
 		}else {
 			alertsInfoLcd[INFO_RESET_AUTO] = 0;
 		}
+		*/
 	}
 
 	void resetearAlarma(){
