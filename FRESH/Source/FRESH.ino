@@ -71,7 +71,7 @@ void setup()
     pinMode(LED_COCHERA, OUTPUT);
     digitalWrite(LED_COCHERA, LOW);
 
-    pinMode(SENSOR_BATERIA_RESPALDO, INPUT_PULLUP);
+    //pinMode(SENSOR_BATERIA_RESPALDO, INPUT_PULLUP);
    //attachInterrupt(digitalPinToInterrupt(FALLO_BATERIA_PRINCIPAL), interrupcionFalloAlimentacion, FALLING); //@develop
 
 	EstadoInicio();
