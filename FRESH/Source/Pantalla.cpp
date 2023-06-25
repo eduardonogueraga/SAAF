@@ -14,6 +14,13 @@ Pantalla::Pantalla() {
 }
 
 void Pantalla::iniciar(){
+/*
+	  int addr = EEPROM.read(CODEC_POSICION_EPPROM);    // Leer dirección almacenada en EEPROM
+	  if (addr != 0xFF) {    // Si la dirección no está vacía (valor predeterminado de la EEPROM)
+	    lcd = LiquidCrystal_I2C(addr, 16, 2);    // Actualizar dirección del objeto LiquidCrystal_I2C
+	  }
+*/
+
 	Wire.begin();
 	lcd.begin(16, 2);
 	lcd.clear();

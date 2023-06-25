@@ -17,6 +17,7 @@
 #include "Teclado.h"
 #include "Env.h"
 #include "Macros.h"
+#include <IRremote.h>
 
 #include "Autenticacion.h"
 #include "Pantalla.h"
@@ -32,7 +33,7 @@
 #include "SQL.h"
 
 //VERSION (VE -> Version Estable VD -> Version Desarrollo)
-const char* version[] = {"FRESH VE20R2", "04/09/22"};
+const char* version[] = {"FRESH VE20TE", "29/05/23"};
 
 //VARIABLES GLOBALES
 ConfigSystem configSystem;
@@ -66,6 +67,25 @@ Menu menu;
 Registro registro;
 Fecha fecha;
 
+//VARIABLES IR
+int SENSOR_IR = A0;
+IRrecv irrecv(SENSOR_IR);
+decode_results codigo;
+
+//Mapeo IR
+char keysIR[12] = {
+  '1', '2', '3',
+  '4', '5', '6',
+  '7', '8', '9',
+  '*', '0', '#'
+};
+
+int CODEC_LDC_01 = 0x3F;
+int CODEC_LDC_02 = 0x27;
+
+//
+
+
 InterStrike mg = InterStrike(0, 1, datosSensores);
 InterStrike pir1 = InterStrike(1, 1, datosSensores, 5000, 60000);
 InterStrike pir2 = InterStrike(2, 2, datosSensores, 7000, 20000);
@@ -80,6 +100,10 @@ const unsigned long TIEMPO_MODO_SENSIBLE = 3600000; // (*0.0166)  -> 60000*
 const unsigned long TIEMPO_BOCINA = 600000; // (*0.0333) -> 20000* //300000(*0.0666) ->20000
 const unsigned long TIEMPO_PRORROGA_GSM = 1200000; // (*0.05) -> 60000
 const unsigned short TIEMPO_CARGA_GSM = 10000;
+
+const unsigned long TIEMPO_PENALIZA_SMS = 54000000; // 15 Horas
+unsigned long ultima_verificacion_sms = 0;
+byte contador_ciclos_refresco = 0;
 
 unsigned long tiempoMargen;
 
@@ -118,6 +142,86 @@ static byte tiempoFracccion;
  void leerEntradaTeclado(){
 	 key = keypad.getKey();
 	 auth.comprobarEntrada();
+ }
+
+ void leerEntradaIR(){
+	 if (irrecv.decode(&codigo)) {   		// si existen datos ya decodificados
+	    Serial.println(codigo.value, HEX);  // imprime valor en hexadecimal en monitor
+
+		  int keyIndex = -1;
+		     switch (codigo.value) {
+		       case 0xE0E020DF: keyIndex = 0; break; // 1
+		       case 0xE0E0A05F: keyIndex = 1; break; // 2
+		       case 0xE0E0609F: keyIndex = 2; break; // 3
+		       case 0xE0E010EF: keyIndex = 3; break; // 4
+		       case 0xE0E0906F: keyIndex = 4; break; // 5
+		       case 0xE0E050AF: keyIndex = 5; break; // 6
+		       case 0xE0E030CF: keyIndex = 6; break; // 7
+		       case 0xE0E0B04F: keyIndex = 7; break; // 8
+		       case 0xE0E0708F: keyIndex = 8; break; // 9
+		       case 0xE0E034CB: keyIndex = 9; break; // *
+		       case 0xE0E08877: keyIndex = 10; break; // 0
+		       case 0xE0E0C837: keyIndex = 11; break; // #
+		     }
+		     if (keyIndex != -1) {
+		    	 key = keysIR[keyIndex];
+		       Serial.println("Tecla IR: " + String(key));
+		     }
+
+
+		    //ACCIONES RAPIDAS
+
+
+		    if(codigo.value == 0xE0E036C9){
+		 		setEstadoGuardia(); //Encerder
+		 	}
+
+		 	if (codigo.value == 0xE0E06897) {
+		 		setEstadoReposo(); //Apagar
+		 	}
+
+		 	 if(codigo.value == 0xE0E0E21D){
+		 		setEstadoEnvio(); //Test SMS
+			 }
+
+		 	if (codigo.value == 0xE0E0D22D) {
+
+		 		if(MODO_DEFAULT){
+		 			Serial.println("Alarma en modo de pruebas");
+		 			MODO_DEFAULT = 0;
+		 		}else {
+		 			Serial.println("Alarma en modo default");
+		 			MODO_DEFAULT = 1;
+		 		}
+		 	}
+
+			if (codigo.value == 0xE0E058A7) {
+
+				short cambiado = -1; //Cambio MENU
+
+				if(procesoCentral == ALARMA && cambiado < 0){
+					Serial.println("Cambiando a vista MENU");
+					procesoCentral = MENU;
+					cambiado = 1;
+				}
+
+				if(procesoCentral == MENU && cambiado < 0){
+					Serial.println("Cambiando a vista ALARMA");
+					procesoCentral = ALARMA;
+					cambiado = 1;
+				}
+
+			}
+/*
+			if(codigo.value == 0xE0E0807F){
+				EEPROM.put(CODEC_POSICION_EPPROM, CODEC_LDC_02);
+			}
+*/
+		auth.comprobarEntrada();
+	    irrecv.resume();     			    // resume la adquisicion de datos
+	  }
+	  delay (50);
+
  }
 
  byte mostrarLcdAlerts(){
@@ -294,17 +398,35 @@ static byte tiempoFracccion;
 	}
 
 	void checkearSms(){
-		if(!configSystem.MODULO_RTC){
-			return;
-		}
-
-		if(fecha.comprobarHora(0, 0)){
-			if(EEPROM.read(MENSAJES_ENVIADOS) != 0){
-				EEPROM.write(MENSAJES_ENVIADOS,0);
-				insertQuery(&sqlIntentosRecuperados);
-				Serial.println(F("Intentos diarios recuperados"));
+		/*
+			if(!configSystem.MODULO_RTC){
+				return;
 			}
-		}
+			 */
+
+
+		   if((millis() - ultima_verificacion_sms  >= TIEMPO_PENALIZA_SMS ) && (contador_ciclos_refresco <15)){
+			   Serial.println(F("Pasan 15H"));
+			   ultima_verificacion_sms = millis();
+			   contador_ciclos_refresco ++;
+
+				if(EEPROM.read(MENSAJES_ENVIADOS) != 0){
+
+					EEPROM.write(MENSAJES_ENVIADOS,0);
+					//insertQuery(&sqlIntentosRecuperados);
+					Serial.println(F("Intentos diarios recuperados"));
+				}
+		   }
+			/*
+			if(fecha.comprobarHora(0, 0)){
+				if(EEPROM.read(MENSAJES_ENVIADOS) != 0){
+					EEPROM.write(MENSAJES_ENVIADOS,0);
+					insertQuery(&sqlIntentosRecuperados);
+					Serial.println(F("Intentos diarios recuperados"));
+				}
+			}
+
+			*/
 
 	}
 

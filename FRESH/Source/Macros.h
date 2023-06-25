@@ -30,6 +30,7 @@
 
 //PANTALLA
 #define CODEC_LCD 0x3F //  0x3F 0x27
+#define CODEC_POSICION_EPPROM 700
 
 //SENSORES
 #define PIR_SENSOR_1 43
@@ -56,8 +57,8 @@
 #define BT_PIN 12
 
 //COMUNICACIONES
-#define GSM_TX 8
-#define GSM_RX 9
+#define GSM_TX 9 //8
+#define GSM_RX 8 //9
 #define BT_TX 10
 #define BT_RX 11
 

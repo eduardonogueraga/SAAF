@@ -31,7 +31,11 @@ void setup()
 {
 	Serial.begin(9600);
 	bluetooh.begin(38400);
+	irrecv.enableIRIn(); //Iniciar Infrarojo
+
 	Serial.println(version[0]);
+
+	Serial.println(EEPROM.read(MENSAJES_ENVIADOS));
 
 	EEPROM_RestoreData(EE_CONFIG_STRUCT, configSystem);
 
@@ -66,19 +70,21 @@ void setup()
     pinMode(LED_COCHERA, OUTPUT);
     digitalWrite(LED_COCHERA, LOW);
 
-    pinMode(SENSOR_BATERIA_RESPALDO, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(FALLO_BATERIA_PRINCIPAL), interrupcionFalloAlimentacion, FALLING);
+    //pinMode(SENSOR_BATERIA_RESPALDO, INPUT_PULLUP);
+    //attachInterrupt(digitalPinToInterrupt(FALLO_BATERIA_PRINCIPAL), interrupcionFalloAlimentacion, FALLING);
 
 	EstadoInicio();
 	cargarEstadoPrevio();
 	checkearAlertasDetenidas();
 	chekearInterrupciones();
 
+
 }
 
 void loop()
 {
 	leerEntradaTeclado();
+	leerEntradaIR();
 	demonio.demonioSerie();
 
 	procesosSistema();
@@ -315,6 +321,7 @@ void setEstadoReposo()
 	tiempoSensible = millis();
 	sleepModeGSM = GSM_OFF;
 	estadoLlamada = TLF_1;
+	mensaje.colgarLlamada();
 	desactivaciones ++;
 	EEPROM.update(EE_ESTADO_GUARDIA, 0);
 	EEPROM.update(EE_ESTADO_ALERTA, 0);

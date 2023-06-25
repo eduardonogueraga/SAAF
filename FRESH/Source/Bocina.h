@@ -15,12 +15,12 @@ class Bocina {
 
 private:
 
-	unsigned short bocinaIntervalo = 5000;
+	unsigned short bocinaIntervalo = 8000;
     unsigned long bocinaTiempoAnt = 0;
 
 public:
 	Bocina();
-	void sonarBocina(unsigned short bocinaIntervalo = 5000);
+	void sonarBocina(unsigned short bocinaIntervalo = 8000);
 	void stopBocina();
 	void bocinaAlert();
 };

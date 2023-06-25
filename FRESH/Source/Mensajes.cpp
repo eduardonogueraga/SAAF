@@ -87,23 +87,10 @@ void Mensajes::enviarSMS(){
 	if(!MODO_DEFAULT)
 		return;
 
-	if(configSystem.MODULO_RTC){
-
-		if(EEPROM.read(MENSAJES_ENVIADOS) > LIMITE_MAXIMO_SMS){
-			Serial.println(F("Intentos diarios acabados"));
-			insertQuery(&sqlSmsIntentosAcabados);
-			return;
-		}
-	}
 
 	procesarSMS();
 
 	insertQuery(&sqlSmsIntentosRealizados);
-	mensajesEnviados++;
-
-	configSystem.SMS_HISTORICO++;
-	EEPROM_SaveData(EE_CONFIG_STRUCT, configSystem);
-	EEPROM.update(MENSAJES_ENVIADOS, (EEPROM.read(MENSAJES_ENVIADOS)+1));
 
 }
 
@@ -126,6 +113,17 @@ void Mensajes::enviarSMSEmergencia(){
 
 void Mensajes::procesarSMS(){
 
+	if(EEPROM.read(MENSAJES_ENVIADOS) >= LIMITE_MAXIMO_SMS){
+			Serial.println(F("Intentos diarios acabados")); //No se enviaran mas mensajes
+
+
+			if(configSystem.MODULO_RTC){
+				insertQuery(&sqlSmsIntentosAcabados);
+			}
+
+			return;
+		}
+
 	SIM800L.println("AT+CMGF=1");
 	delay(200);
 	SIM800L.println("AT+CMGS=\"+34"+(String)telefonoPrincipal+"\"");
@@ -140,12 +138,22 @@ void Mensajes::procesarSMS(){
 	delay(200);
 	SIM800L.println("");
 	delay(200);
+
+	mensajesEnviados++;
+	configSystem.SMS_HISTORICO++;
+	EEPROM_SaveData(EE_CONFIG_STRUCT, configSystem);
+	EEPROM.update(MENSAJES_ENVIADOS, (EEPROM.read(MENSAJES_ENVIADOS)+1));
 }
 
 void Mensajes::llamarTlf(char* tlf){
 
 	if(!MODO_DEFAULT)
 	return;
+
+	if(EEPROM.read(MENSAJES_ENVIADOS) >= (LIMITE_MAXIMO_SMS-7)){
+			Serial.println(F("Intentos diarios acabados")); //No se haran mas llamadas
+			return;
+		}
 
 	Serial.println("Llamando "+(String)tlf);
 	SIM800L.println("AT");

@@ -7,6 +7,9 @@
 
 #include "ComandoSerie.h"
 #include <SoftwareSerial.h>
+#include <IRremote.h>
+
+
 
 
 ComandoSerie::ComandoSerie() {

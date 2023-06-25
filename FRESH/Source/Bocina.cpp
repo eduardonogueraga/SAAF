@@ -16,14 +16,14 @@ Bocina::Bocina()
 void Bocina::sonarBocina(unsigned short intervalo) {
 
 	if((millis()-bocinaTiempoAnt>=intervalo) && (digitalRead(BOCINA_PIN)==1)){
-		//Serial.println("BOCINA OUT");
+		Serial.println("BOCINA OUT");
 
 		digitalWrite(BOCINA_PIN,LOW);
 		bocinaTiempoAnt=millis();
 	}
 
 	if((millis()-bocinaTiempoAnt>=intervalo) && (digitalRead(BOCINA_PIN)==0)){
-		//Serial.println("BOCINA IN");
+		Serial.println("BOCINA IN");
 
 		digitalWrite(BOCINA_PIN, HIGH);
 		bocinaTiempoAnt=millis();
