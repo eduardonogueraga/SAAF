@@ -89,7 +89,7 @@ int CODEC_LDC_02 = 0x27;
 InterStrike mg = InterStrike(0, 1, datosSensores);
 InterStrike pir1 = InterStrike(1, 1, datosSensores, 5000, 60000);
 InterStrike pir2 = InterStrike(2, 2, datosSensores, 7000, 20000);
-InterStrike pir3 = InterStrike(3, 2, datosSensores, 5000, 21000);
+InterStrike pir3 = InterStrike(3, 4, datosSensores, 5000, 40000); //Modificado por los ultimos sucesos (2 - 21 seg)
 
 //TIEMPOS MARGEN
 
