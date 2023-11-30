@@ -39,6 +39,9 @@ void setup()
 
 	EEPROM_RestoreData(EE_CONFIG_STRUCT, configSystem);
 
+
+	//Inicio de perifericos
+	iniciarTecladoI2C();
 	pantalla.iniciar();
 	mensaje.inicioSIM800(SIM800L);
 	registro.iniciar();

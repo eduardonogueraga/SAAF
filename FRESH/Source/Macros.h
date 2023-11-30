@@ -29,7 +29,7 @@
 #define COL_3 42
 
 //PANTALLA
-#define CODEC_LCD 0x3F //  0x3F 0x27
+#define CODEC_LCD 0x25 //  0x3F(Orignal) 0x27
 #define CODEC_POSICION_EPPROM 700
 
 //SENSORES
